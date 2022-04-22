@@ -6,6 +6,7 @@ import javafx.stage.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
 import javafx.scene.image.*;
+import javafx.scene.text.*;
 import java.io.*;
 import java.util.*;
 
@@ -56,7 +57,8 @@ public class Main extends Application {
 		Label lb= new Label("Standard Model Of Particle Physics");
 		// create a new Label - this is the top label
 
-
+		lb.setFont(new Font("Arial", 30));
+		lb.setPadding(new Insets(0,0,50,0));
 		HBox topLabels = new HBox();
 		// new HBoxox for the three particles - fermions, antifermions, bosons
 
@@ -69,7 +71,7 @@ public class Main extends Application {
 
 		fermion_label.getChildren().addAll(fermion1, fermion2);
 		// add the two labels to the vbox
-
+		fermion_label.setPadding(new Insets(0, 100, 0, 0));
 
 
 		VBox antifermion_label = new VBox();
@@ -80,7 +82,7 @@ public class Main extends Application {
 		// two labels for two lines
 
 		antifermion_label.getChildren().addAll(antifermion1, antifermion2);
-
+		antifermion_label.setPadding(new Insets(0, 100, 0, 0));
 
 		VBox boson_label = new VBox();
 		//two labels, one below each other
@@ -122,7 +124,7 @@ public class Main extends Application {
 
 
 		FileInputStream fi;
-		ImageView imgv;
+		// ImageView imgv;
 		Image img;
 		// for reading and creating image files
 
@@ -135,14 +137,32 @@ public class Main extends Application {
 
 
 				fi=new FileInputStream(pictureFiles.get(i).get(j));
-				img =new Image(fi);
-				imgv= new ImageView(img);
+				img =new Image(fi,80, 80, false, false);
+				final ImageView imgv= new ImageView(img);
 				// System.out.println("Accessed one image");
-				gd.add(imgv, j*5, i*5, 5, 5);
+				gd.add(imgv, j*5+17, i*5+10, 5, 5);
+				StackPane stickyNotesPane = new StackPane();
+				stickyNotesPane.setPrefSize(200, 200);
+				stickyNotesPane.setStyle("-fx-background-color: yellow;");
+
+				Popup popup = new Popup();
+				popup.getContent().add(stickyNotesPane);
+
+				imgv.hoverProperty().addListener((obs, oldVal, newValue) -> {
+					if (newValue) {
+						final Bounds bnds = imgv.localToScreen(imgv.getLayoutBounds());
+						final double x = bnds.getMinX() + (stickyNotesPane.getWidth() / 3) + (imgv.getFitWidth() / 2);
+						final double y = bnds.getMinY() - stickyNotesPane.getHeight();
+						popup.show(imgv, x, y);
+					} else {
+						popup.hide();
+					}
+				});
 			}
 		}
 		gd.setHgap(10);
 		gd.setVgap(10);
+		gd.setPadding(new Insets(-10,0 ,0, 100));
 		// set vertical and horizontal gaps
 
 
@@ -161,6 +181,8 @@ public class Main extends Application {
 		// the initial labels, as well as the single labels for each particle
 
 		vb.getChildren().add(this.setTitleComponent());
+		vb.setPadding(new Insets(50, 50, 50, 50));
+
 		setImageStrings(new File("./images"));
 
 		// try{
