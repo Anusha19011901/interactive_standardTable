@@ -141,6 +141,8 @@ public class Main extends Application {
 				final ImageView imgv= new ImageView(img);
 				// System.out.println("Accessed one image");
 				gd.add(imgv, j*5+17, i*5+10, 5, 5);
+
+				// code for adding tooltip
 				StackPane stickyNotesPane = new StackPane();
 				stickyNotesPane.setPrefSize(200, 200);
 				stickyNotesPane.setStyle("-fx-background-color: yellow;");
